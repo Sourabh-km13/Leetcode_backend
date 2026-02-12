@@ -1,8 +1,38 @@
 # 🚀 LeetCode Clone Backend — Microservices Architecture
 
-A production-style **LeetCode-like coding platform backend** built using a scalable **microservices architecture**.
+<table>
+<tr>
+<td>
 
-This project demonstrates real-world backend engineering principles including:
+A production-style **LeetCode-like coding platform backend** built using a scalable microservices architecture.
+
+</td>
+<td align="right">
+
+### 🔗 Repositories
+
+- [Problem-Service](https://github.com/Sourabh-km13/Problem_service)
+- [Submission-Service](https://github.com/Sourabh-km13/Submission-Service)
+- [Evaluator-Service](https://github.com/Sourabh-km13/Evaluator-Service)
+- [Socket-Service](https://github.com/Sourabh-km13/Socket-Service)
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏗️ Architecture Diagram
+
+> High-level system flow and service interaction
+
+![Architecture Diagram](./architecture.png)
+
+> Make sure you add your architecture image file as `architecture.png` in the root of this repository.
+
+---
+
+## 🚀 Architecture Highlights
 
 - **Docker-based execution sandboxing** for running user code safely in isolated JVM, Node, and GNU environments  
 - **Asynchronous evaluation pipeline** using Redis Pub/Sub for inter-service messaging  
@@ -14,172 +44,63 @@ This project demonstrates real-world backend engineering principles including:
 
 ---
 
-# 📌 System Overview
+## 📌 System Overview
 
-The backend consists of **four independent microservices**, each handling a specific domain responsibility.
+The backend consists of four independent services:
 
 | Service | Responsibility |
 |----------|---------------|
 | **Problem-Service** | Manages coding problems and metadata |
 | **Submission-Service** | Tracks and manages submission lifecycle |
 | **Evaluator-Service** | Executes and evaluates user code |
-| **Socket-Service** | Enables real-time communication |
-
-Each service:
-- Has its own isolated repository
-- Can be deployed independently
-- Can scale independently
-- Communicates using HTTP & asynchronous Redis Pub/Sub
+| **Socket-Service** | Handles real-time communication |
 
 ---
-
-# 🏗️ High-Level Architecture
 
 ## 🔁 Execution Flow
 
-1. Client requests problem from **Problem-Service**
-2. User submits code → **Submission-Service**
-3. Submission-Service forwards job → **Evaluator-Service**
-4. Evaluator executes code safely against test cases
-5. Results returned to Submission-Service
-6. **Socket-Service** pushes real-time status updates to client
-
-## 📦 Shared Infrastructure
-
-- **MongoDB** → Persistent storage
-- **Redis** → Caching, Pub/Sub messaging, Socket scaling
-
-This architecture enables:
-- Non-blocking evaluation pipeline
-- Event-driven communication
-- Fault isolation between services
+1. Client fetches problem from **Problem-Service**
+2. Client submits solution → **Submission-Service**
+3. Submission stored and marked as `Pending`
+4. Submission published to Redis queue
+5. Evaluator-Service consumes job asynchronously
+6. Code executed inside Docker container
+7. Results returned to Submission-Service
+8. Status updated in database
+9. Socket-Service pushes real-time update to client
 
 ---
 
-# 🔧 Microservices Breakdown
+## 🛠 Tech Stack
 
----
-
-## 📚 Problem-Service
-
-🔗 Repository:  
-https://github.com/Sourabh-km13/Problem_service  
-
-### Responsibilities
-- Create, update, delete coding problems
-- Store problem statements, constraints, examples
-- Manage tags, categories, difficulty
-- Provide search and filtering
-- Serve structured problem data
-
----
-
-## 📤 Submission-Service
-
-🔗 Repository:  
-https://github.com/Sourabh-km13/Submission-Service  
-
-### Responsibilities
-- Store submission metadata
-- Maintain submission states:
-  - Pending
-  - Running
-  - Accepted
-  - Wrong Answer
-  - Runtime Error
-- Track user submission history
-- Coordinate with Evaluator-Service
-- Provide analytics
-
-Acts as the orchestration layer between user requests and code execution.
-
----
-
-## ⚡ Evaluator-Service
-
-🔗 Repository:  
-https://github.com/Sourabh-km13/Evaluator-Service  
-
-### Responsibilities
-- Execute user-submitted code
-- Validate against test cases
-- Enforce time and memory constraints
-- Return detailed execution metrics:
-  - Execution time
-  - Memory usage
-  - Test case results
-  - Error messages
-
-### Built With
-- Node.js
-- TypeScript (for type-safe execution flow)
-
-Designed to scale horizontally under heavy submission load.
-
----
-
-## 🔌 Socket-Service
-
-🔗 Repository:  
-https://github.com/Sourabh-km13/Socket-Service  
-
-### Responsibilities
-- Manage WebSocket connections
-- Push real-time submission updates
-- Broadcast evaluation results
-- Handle concurrent users
-- Scale using Redis adapter
-
-### Technologies
-- Express.js
-- Socket.IO
-- Redis
-- IORedis
-
----
-
-# 🛠 Technology Stack
-
-## Backend
+**Backend**
 - Node.js
 - Express.js
-- TypeScript (Evaluator-Service)
+- TypeScript
 
-## Database & Caching
+**Execution**
+- Docker (isolated code sandbox)
+
+**Database & Messaging**
 - MongoDB
-- Redis
+- Redis (Pub/Sub)
 
-## Real-Time Communication
+**Real-Time**
 - Socket.IO
-- socket.io-redis adapter
-
-## Tooling
-- ESLint
-- Prettier
-- npm
 
 ---
 
-# 🎯 Key Engineering Highlights
+## 🎯 Why This Project Stands Out
 
-- ✅ Microservices architecture
-- ✅ Event-driven evaluation pipeline
-- ✅ Real-time submission tracking
-- ✅ Independent service scaling
-- ✅ Redis-based inter-service communication
-- ✅ Type-safe evaluator service
-- ✅ Fault isolation between execution and storage
+- Distributed service architecture  
+- Secure sandboxed execution engine  
+- Event-driven submission processing  
+- Real-time status broadcasting  
+- Clean separation of execution and API layers  
 
 ---
 
-# 🚀 Running the Services
+## 👨‍💻 Author
 
-## Prerequisites
-- Node.js (v14+)
-- MongoDB
-- Redis
-
-## Installation (For Each Service)
-
-```bash
-check respective repository
+**Sourabh Kumar**  
+GitHub: https://github.com/Sourabh-km13
