@@ -26,7 +26,7 @@ A production-style **LeetCode-like coding platform backend** built using a scala
 
 > High-level system flow and service interaction
 
-![Architecture Diagram](./architecture.png)
+![Architecture Diagram](./Architecture.png)
 
 > Make sure you add your architecture image file as `architecture.png` in the root of this repository.
 
@@ -35,12 +35,14 @@ A production-style **LeetCode-like coding platform backend** built using a scala
 ## 🚀 Architecture Highlights
 
 - **Docker-based execution sandboxing** for running user code safely in isolated JVM, Node, and GNU environments  
-- **Asynchronous evaluation pipeline** using Redis Pub/Sub for inter-service messaging  
-- **Real-time updates** via WebSockets (Socket.IO)  
-- **Distributed state management** with Redis and MongoDB  
-- **Clear separation of concerns** across Problem, Submission, Evaluator, and Socket services  
-- **Fault isolation** to prevent execution load from impacting core APIs  
-- **Modular, extensible architecture** ready for future additions like job queues or API gateways  
+- **Asynchronous evaluation pipeline** using Redis Bullmq for inter-service messaging queues  
+- **Real-time updates** via WebSockets (Socket.IO)   
+- **Clear separation of concerns using microservices** across Problem, Submission, Evaluator, and Socket services  
+- **High-performance backend using Fastify** for handling high concurrency and low latency  
+- **Scalable architecture with MVC layering & Strategy Pattern** for clean separation of concerns and extensibility  
+- **Type-safe codebase with TypeScript** to reduce runtime errors and improve maintainability  
+- **Centralized error handling middleware** with custom `BaseError` and standardized API responses  
+- **DTO-based validation using Zod** for strict input validation and runtime type safety  
 
 ---
 
@@ -61,13 +63,14 @@ The backend consists of four independent services:
 
 1. Client fetches problem from **Problem-Service**
 2. Client submits solution → **Submission-Service**
-3. Submission stored and marked as `Pending`
-4. Submission published to Redis queue
-5. Evaluator-Service consumes job asynchronously
+3. Submission stored and client sees  `Pending`
+4. Submission published to Redis submission queue
+5. **Evaluator-Service** consumes job asynchronously
 6. Code executed inside Docker container
-7. Results returned to Submission-Service
-8. Status updated in database
-9. Socket-Service pushes real-time update to client
+7. Results pushed to Evaluation queue
+8. Submission service works on evalutation queue 
+9. submission status updated in database and a post request of status sent to socket-service.
+10. **Socket-Service** pushes real-time update to client
 
 ---
 
@@ -76,29 +79,20 @@ The backend consists of four independent services:
 **Backend**
 - Node.js
 - Express.js
-- TypeScript
+- Fastify
+- TypeScript, Javascript
 
 **Execution**
 - Docker (isolated code sandbox)
 
 **Database & Messaging**
-- MongoDB
-- Redis (Pub/Sub)
+- MongoDb, Mongoose
+- Redis , BullMq
 
 **Real-Time**
 - Socket.IO
 
----
 
-## 🎯 Why This Project Stands Out
-
-- Distributed service architecture  
-- Secure sandboxed execution engine  
-- Event-driven submission processing  
-- Real-time status broadcasting  
-- Clean separation of execution and API layers  
-
----
 
 ## 👨‍💻 Author
 
